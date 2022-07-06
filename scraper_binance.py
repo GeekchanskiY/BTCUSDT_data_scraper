@@ -9,7 +9,6 @@ class BinanceDataHolder:
     def __init__(self):
         self.data: list[dict] = []
 
-
     def parse_data(self):
         r = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT").json()
         self.data.append({
