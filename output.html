@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data output sample</title>
+</head>
+<body>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    header{
+        top: 0;
+        left: 0;
+        text-align: center;
+        background-color: black;
+        color: #fff;
+        padding:5px;
+    }
+    .graphic{
+        position: fixed;
+        left: 0.5%;
+        top: 30px;
+        border: 1px solid black;
+        width: 99%;
+        height: 500px;
+    }
+    .articles{
+        width:100%;
+        margin-top: 600px;
+    }
+    .dot{
+        background-color: black;
+        border-radius: 50px;
+        border: 1.5px solid red;
+        height: 4px;
+        width: 4px;
+        position: absolute;
+    }
+</style>
+<header>
+    Output data for BTCUSDT for 07.07.2022
+</header>
+    <div class="graphic" id="GRAPHIC">
+    </div>
+
+    <div class="articles">
+        <article>
+            <h2>name</h2>
+            <a href="google.com">post link</a>
+            <span>post date</span>
+        </article>
+    </div>
+<script>
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+    const MAX_HEIGHT = 500;
+    MAX_PRICE = 0;
+    MIN_PRICE = 25000;
+    WIDTH_PER_UNIT = 0;
+    const WINDOW_WIDTH = window.innerWidth;
+    GRAPHIC_WIDTH = WINDOW_WIDTH/100*99;
+    data = [];
+    for (i = 1; i <= 1000; i++){
+        let new_price = 20000+getRandomInt(1000);
+        if (new_price < MIN_PRICE){
+            MIN_PRICE = new_price;
+        }
+        if (new_price > MAX_PRICE){
+            MAX_PRICE = new_price;
+        }
+        data.push({
+            "time": i,
+            "price": 20000+getRandomInt(1000),
+            "news": [{"title": i, "link": "https://google.com", "date": "2022-05-04"},{"title": i, "link": "https://google.com", "date": "2022-05-04"},{"title": i, "link": "https://google.com", "date": "2022-05-04"},]
+        })
+    }
+    DOT_WIDTH = GRAPHIC_WIDTH / data.length
+    GRAPHIC_HEIGHT_UNIT = MAX_HEIGHT/(MAX_PRICE - MIN_PRICE)
+    GRAPHIC_ELEMENT = document.getElementById("GRAPHIC")
+    dots = []
+    data.forEach((el, index) => {
+        console.log(String(index*DOT_WIDTH))
+        new_element = document.createElement("div");
+        new_inner_element = document.createElement("div");
+
+        new_element.classList.add("dot");
+        new_element.style.marginLeft = String(index*DOT_WIDTH)+"px";
+        margin_top = MAX_HEIGHT - (el["price"]-MIN_PRICE)*GRAPHIC_HEIGHT_UNIT;
+        new_element.style.marginTop = String(margin_top)+"px";
+        GRAPHIC_ELEMENT.appendChild(new_element);
+    })
+
+</script>
+</body>
+</html>
