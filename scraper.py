@@ -1,0 +1,6 @@
+from scraper_utoday import get_utoday_news
+from scraper_bitcoin import get_bitcoin_news
+from scraper_decrypt import get_decrypt_news
+from scraper_dailyhodl import get_dailyhold_news
+f
+from scraper_binance import BinanceDataHolder
