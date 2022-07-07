@@ -32,11 +32,26 @@
     }
     .dot{
         background-color: black;
-        border-radius: 50px;
-        border: 1.5px solid red;
-        height: 4px;
-        width: 4px;
+        border-radius: 30px;
+        height: 7px;
+        width: 7px;
         position: absolute;
+        z-index: -1;
+    }
+    .dot div{
+        display: none;
+        position: absolute;
+        margin-top: -40px;
+        background-color: green;
+        width: 100px;
+        z-index: 3;
+    }
+    .dot:hover{
+        background-color: aquamarine;
+    }
+    .dot:hover > div{
+        display: block;
+
     }
 </style>
 <header>
@@ -44,14 +59,25 @@
 </header>
     <div class="graphic" id="GRAPHIC">
     </div>
-
-    <div class="articles">
+    <div class="data articles">
+        Selected Dot Date: <span id="s_date">Dot is not selected</span> <br>
+        Selected Dot Price: <span id="s_price">Dot is not selected</span> <br>
+        <h3>graphic params</h3>
+        graphic min price: <span id="g_min_price"></span> <br>
+        graphic max price: <span id="g_max_price"></span> <br>
+        graphic unit height: <span id="g_unit_height"></span> <br>
+        graphic unit width: <span id="g_unit_width"></span> <br>
+    </div>
+    <div class="data">
         <article>
             <h2>name</h2>
             <a href="google.com">post link</a>
             <span>post date</span>
         </article>
     </div>
+    <footer>
+        <span style="position: fixed; right:30px; bottom: 20px;">Made by <a href="https://kwork.ru/user/dmtdev">DMT</a></span>
+    </footer>
 <script>
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
@@ -61,9 +87,9 @@
     MIN_PRICE = 25000;
     WIDTH_PER_UNIT = 0;
     const WINDOW_WIDTH = window.innerWidth;
-    GRAPHIC_WIDTH = WINDOW_WIDTH/100*99;
+    GRAPHIC_WIDTH = WINDOW_WIDTH/100*98;
     data = [];
-    for (i = 1; i <= 1000; i++){
+    for (i = 1; i <= 100; i++){
         let new_price = 20000+getRandomInt(1000);
         if (new_price < MIN_PRICE){
             MIN_PRICE = new_price;
@@ -80,18 +106,44 @@
     DOT_WIDTH = GRAPHIC_WIDTH / data.length
     GRAPHIC_HEIGHT_UNIT = MAX_HEIGHT/(MAX_PRICE - MIN_PRICE)
     GRAPHIC_ELEMENT = document.getElementById("GRAPHIC")
-    dots = []
+    document.getElementById("g_min_price").innerText = MIN_PRICE
+    document.getElementById("g_max_price").innerText = MAX_PRICE
+    document.getElementById("g_unit_height").innerText = GRAPHIC_HEIGHT_UNIT + " px"
+    document.getElementById("g_unit_width").innerText = DOT_WIDTH + " px"
+    prev_dot_x = 0
+    prev_dot_y = 0
     data.forEach((el, index) => {
-        console.log(String(index*DOT_WIDTH))
+
+        // Drawing dots
+
         new_element = document.createElement("div");
         new_inner_element = document.createElement("div");
+        inner_date = document.createElement("span")
+        inner_date.innerText = "Time: ".concat(el["time"])
+        inner_price = document.createElement("span")
+        inner_price.innerText = "Price: ".concat(el["price"])
+        new_inner_element.appendChild(inner_date)
+        new_inner_element.appendChild(document.createElement("br"))
+        new_inner_element.appendChild(inner_price)
+        new_element.appendChild(new_inner_element)
+        new_element.setAttribute("index", index)
 
         new_element.classList.add("dot");
         new_element.style.marginLeft = String(index*DOT_WIDTH)+"px";
         margin_top = MAX_HEIGHT - (el["price"]-MIN_PRICE)*GRAPHIC_HEIGHT_UNIT;
         new_element.style.marginTop = String(margin_top)+"px";
+
+        // Drawing lines between dots
+
+
+        new_element.addEventListener("click", (e) => {
+            document.getElementById("s_date").innerText = el["time"]
+            document.getElementById("s_price").innerText = el["price"]
+        })
         GRAPHIC_ELEMENT.appendChild(new_element);
+
     })
+
 
 </script>
 </body>
