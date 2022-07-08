@@ -17,14 +17,7 @@ class BinanceDataScraper:
 
 if __name__ == '__main__':
     db = DB()
-    dataholder = BinanceDataScraper(db)
-    while True:
-        try:
-            dataholder.parse_data()
-        except Exception as e:
-            print(str(e))
-        print(len(list(db.cur.execute('SELECT * FROM price_data'))))
-        time.sleep(60)
+    scraper = BinanceDataScraper(db)
 
 
 
