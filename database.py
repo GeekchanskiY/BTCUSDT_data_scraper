@@ -1,4 +1,5 @@
 import sqlite3
+import pandas
 
 
 class DB:
@@ -8,9 +9,11 @@ class DB:
 
         self.cur.execute('''CREATE TABLE IF NOT EXISTS price_data
                        (datetime text, symbol text, price real)''')
+        self.cur.execute('''CREATE INDEX IF NOT EXISTS data_idx ON price_data (datetime)''')
         self.cur.execute('''CREATE TABLE IF NOT EXISTS news_data
                            (date text, symbol text, title text, link text, time text,
                            CONSTRAINT link_unique UNIQUE (link))''')
+        self.cur.execute('''CREATE INDEX IF NOT EXISTS news_idx ON news_data (date)''')
 
         self.con.commit()
 
@@ -30,7 +33,12 @@ class DB:
         for row in self.cur.execute('SELECT link FROM news_data'):
             print(row)
 
+    def get_prices_dataframe(self):
+        dataframe = pandas.read_sql_query("SELECT * FROM price_data", self.con)
+        print(dataframe)
+        return dataframe
+
 
 if __name__ == '__main__':
     database: DB = DB()
-    database.print_news()
+    database.get_prices_dataframe()
