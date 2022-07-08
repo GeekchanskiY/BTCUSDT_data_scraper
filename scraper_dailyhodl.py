@@ -17,7 +17,7 @@ def get_dailyhold_news(driver: webdriver) -> list[dict]:
             "date": date.strftime("%Y-%m-%d"),
             "name": article.find_element(By.TAG_NAME, "h3").text,
             "link": article.find_element(By.TAG_NAME, "a").get_attribute("href"),
-            "time": "00:00"
+            "time": datetime.strftime(datetime.now(), "%H:%M")
         })
 
     return output_data
