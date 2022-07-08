@@ -14,7 +14,8 @@ def get_utoday_news() -> list[dict]:
             {
                 "name": article.find("div", attrs={"class": "category-item__title"}).text,
                 "link": article.find("a", attrs={"class": "category-item__title-link"})["href"],
-                "time": datetime.strftime(time, "%Y-%m-%d")
+                "date": datetime.strftime(time, "%Y-%m-%d"),
+                "time": datetime.strftime(time, "%H:%M")
             }
         )
 

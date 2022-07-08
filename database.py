@@ -38,7 +38,12 @@ class DB:
         print(dataframe)
         return dataframe
 
+    def get_news_dataframe(self):
+        dataframe = pandas.read_sql_query("SELECT * FROM news_data", self.con)
+        print(dataframe)
+        return dataframe
+
 
 if __name__ == '__main__':
     database: DB = DB()
-    database.get_prices_dataframe()
+    database.get_news_dataframe()
