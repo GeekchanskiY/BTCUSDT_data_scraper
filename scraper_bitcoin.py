@@ -50,7 +50,8 @@ def get_bitcoin_news(driver: webdriver) -> list[dict]:
         output_data.append({
             "link": article.find_element(By.TAG_NAME, "a").get_attribute("href"),
             "name": article.find_element(By.CLASS_NAME, "story__title").text,
-            "date": date_ago.strftime("%Y-%m-%d")
+            "date": date_ago.strftime("%Y-%m-%d"),
+            "time": date_ago.strftime("%H:%M")
         })
     return output_data
 
