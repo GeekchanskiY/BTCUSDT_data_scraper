@@ -11,7 +11,6 @@ def get_dailyhold_news(driver: webdriver) -> list[dict]:
     articles = driver.find_elements(By.TAG_NAME, "article")
     for article in articles:
         time = article.find_element(By.CLASS_NAME, "jeg_meta_date").text
-        print(time)
         date = datetime.strptime(time, "%B %d, %Y")
         output_data.append({
             "date": date.strftime("%Y-%m-%d"),
