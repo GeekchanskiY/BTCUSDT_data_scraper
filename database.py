@@ -18,11 +18,13 @@ class DB:
         self.con.commit()
 
     def add_price(self, symbol: str, date: str, price: float):
-        self.cur.execute(f"INSERT INTO price_data VALUES ('{date}', '{symbol}', {price})")
+        self.cur.execute(f"INSERT INTO price_data VALUES (?, ?, ?)",
+                         (date, symbol, price))
         self.con.commit()
 
     def add_news(self, symbol: str, date: str, time: str, link: str, text: str):
-        self.cur.execute(f"INSERT OR IGNORE INTO news_data VALUES ('{date}', '{symbol}', '{text}', '{link}', '{time}')")
+        self.cur.execute(f"INSERT OR IGNORE INTO news_data VALUES (?, ?, ?, ?, ?)",
+                         (date, symbol, text, link, time))
         self.con.commit()
 
     def print_prices(self):
