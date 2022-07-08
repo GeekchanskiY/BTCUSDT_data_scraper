@@ -19,6 +19,12 @@ class ScrapersHandler:
     def scrap_all_selenium(self):
         data = get_dailyhold_news(self.driver)
         self.add_news_to_db(data)
+        data = get_bitcoin_news(self.driver)
+        self.add_news_to_db(data)
+
+    def scrap_all_requests(self):
+        data = get_utoday_news()
+        self.add_news_to_db(data)
 
     def add_news_to_db(self, data: list[dict]):
         for d in data:
