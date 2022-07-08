@@ -4,6 +4,11 @@ from scraper_utoday import get_utoday_news
 from scraper_bitcoin import get_bitcoin_news
 from scraper_decrypt import get_decrypt_news
 from scraper_dailyhodl import get_dailyhold_news
+from scraper_cointelagraph import get_cointelegraph_news
+# from scraper_cryptopotato import get_cryptopotato_news
+from scraper_beincrypto import get_beincrypto_news
+
+
 from scraper_binance import BinanceDataScraper
 
 from database import DB
@@ -25,6 +30,8 @@ class ScrapersHandler:
             self.binance_data_scraper.parse_data()
             self.scrap_all_selenium()
             self.scrap_all_requests()
+            self.driver.quit()
+            self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
             time.sleep(delay_seconds)
 
     def scrap_all_selenium(self):
@@ -34,9 +41,19 @@ class ScrapersHandler:
         self.add_news_to_db(data)
         data = get_decrypt_news(self.driver)
         self.add_news_to_db(data)
+        data = get_cointelegraph_news(self.driver)
+        self.add_news_to_db(data)
 
     def scrap_all_requests(self):
         data = get_utoday_news()
+        self.add_news_to_db(data)
+
+        # Cryptopotato is not available at the moment
+
+        #data = get_cryptopotato_news()
+        #self.add_news_to_db(data)
+
+        data = get_beincrypto_news()
         self.add_news_to_db(data)
 
     def add_news_to_db(self, data: list[dict]):
@@ -52,4 +69,3 @@ class ScrapersHandler:
 
 if __name__ == '__main__':
     scraper = ScrapersHandler(10)
-    scraper.scrap_all_selenium()
