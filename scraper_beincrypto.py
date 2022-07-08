@@ -15,7 +15,8 @@ def get_beincrypto_news() -> list:
             {
                 "link": card.find("a")["href"],
                 "name": card.find("div", attrs={"class": "title"}).text.replace("\n", ""),
-                "date": str_date
+                "date": str_date,
+                "time": datetime.now().strftime("%H:%M")
             }
         )
     return output_data

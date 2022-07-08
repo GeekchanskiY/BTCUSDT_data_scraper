@@ -2,7 +2,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-
+from datetime import datetime
 
 def get_cointelegraph_news(driver: webdriver) -> list[dict]:
     """
@@ -18,7 +18,8 @@ def get_cointelegraph_news(driver: webdriver) -> list[dict]:
             {
                 "link": article.find_element(By.TAG_NAME, "a").get_attribute("href"),
                 "name": article.find_element(By.CLASS_NAME, "post-card-inline__title").text,
-                "date": article.find_element(By.CLASS_NAME, "post-card-inline__date").get_attribute("datetime")
+                "date": article.find_element(By.CLASS_NAME, "post-card-inline__date").get_attribute("datetime"),
+                "time": datetime.now().strftime("%H:%M")
             }
         )
 
