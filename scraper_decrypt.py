@@ -13,17 +13,19 @@ def get_decrypt_news(driver: webdriver) -> list[dict]:
     articles = driver.find_elements(By.CLASS_NAME, "block")
     for article in articles:
         try:
-            time = article.find_element(By.TAG_NAME, "time").get_attribute("datetime").split("T")[0]
+            date = article.find_element(By.TAG_NAME, "time").get_attribute("datetime").split("T")[0]
+            time = article.find_element(By.TAG_NAME, "time").get_attribute("datetime").split("T")[1]
+            time = "{}:{}".format(time.split(":")[0], time.split(":")[1])
         except:
             continue
         output_data.append({
             "name": article.find_element(By.TAG_NAME, "h2").text,
             "link": article.get_attribute("href"),
+            "date": date,
             "time": time
         })
 
     return output_data
-
 
 
 if __name__ == '__main__':
