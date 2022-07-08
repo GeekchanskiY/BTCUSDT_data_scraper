@@ -51,5 +51,5 @@ class ScrapersHandler:
 
 
 if __name__ == '__main__':
-    scraper = ScrapersHandler()
+    scraper = ScrapersHandler(10)
     scraper.scrap_all_selenium()
