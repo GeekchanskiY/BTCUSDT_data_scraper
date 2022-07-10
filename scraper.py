@@ -35,14 +35,26 @@ class ScrapersHandler:
             time.sleep(delay_seconds)
 
     def scrap_all_selenium(self):
-        data = get_dailyhold_news(self.driver)
-        self.add_news_to_db(data)
-        data = get_bitcoin_news(self.driver)
-        self.add_news_to_db(data)
-        data = get_decrypt_news(self.driver)
-        self.add_news_to_db(data)
-        data = get_cointelegraph_news(self.driver)
-        self.add_news_to_db(data)
+        try:
+            data = get_dailyhold_news(self.driver)
+            self.add_news_to_db(data)
+        except Exception as e:
+            print(f"dailyHodl error {str(e)}")
+        try:
+            data = get_bitcoin_news(self.driver)
+            self.add_news_to_db(data)
+        except Exception as e:
+            print(f"bitcoin error {str(e)}")
+        try:
+            data = get_decrypt_news(self.driver)
+            self.add_news_to_db(data)
+        except Exception as e:
+            print(f"decrypt error {str(e)}")
+        try:
+            data = get_cointelegraph_news(self.driver)
+            self.add_news_to_db(data)
+        except Exception as e:
+            print(f"cointelegraph error {str(e)}")
 
     def scrap_all_requests(self):
         data = get_utoday_news()
