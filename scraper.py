@@ -8,6 +8,7 @@ from scraper_cointelagraph import get_cointelegraph_news
 from scraper_coingape import get_coingape_news
 from scraper_theblock import get_theblock_news
 from scraper_bitcoinmagazine import get_bitcoinmagazine_news
+from scraper_blockworks import get_blockworks_news
 # from scraper_cryptopotato import get_cryptopotato_news
 from scraper_beincrypto import get_beincrypto_news
 
@@ -69,6 +70,12 @@ class ScrapersHandler:
             self.add_news_to_db(data)
         except Exception as e:
             print(f"theblock error {str(e)}")
+
+        try:
+            data = get_blockworks_news(self.driver)
+            self.add_news_to_db(data)
+        except Exception as e:
+            print(f"blockworks error {str(e)}")
 
     def scrap_all_requests(self):
         data = get_utoday_news()
