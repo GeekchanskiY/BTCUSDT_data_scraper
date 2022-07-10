@@ -20,7 +20,7 @@ def get_theblock_news(driver: webdriver) -> list[dict]:
         date = datetime.datetime.strptime(date, "%B %d, %Y, %H:%M %p")
         output_data.append({
             "link": article.find_element(By.TAG_NAME, "a").get_attribute("href"),
-            "text": article.find_element(By.TAG_NAME, "h2").text,
+            "name": article.find_element(By.TAG_NAME, "h2").text,
             "date": date.strftime("%Y-%m-%d"),
             "time": date.strftime("%H:%M")
         })
