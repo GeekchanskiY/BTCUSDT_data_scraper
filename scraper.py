@@ -10,6 +10,7 @@ from scraper_theblock import get_theblock_news
 from scraper_bitcoinmagazine import get_bitcoinmagazine_news
 from scraper_blockworks import get_blockworks_news
 from scraper_bitcoinist import get_bitcoinist_news
+from scraper_forbes import get_forbes_news
 # from scraper_cryptopotato import get_cryptopotato_news
 from scraper_beincrypto import get_beincrypto_news
 
@@ -91,6 +92,8 @@ class ScrapersHandler:
         data = get_beincrypto_news()
         self.add_news_to_db(data)
         data = get_bitcoinist_news()
+        self.add_news_to_db(data)
+        data = get_forbes_news()
         self.add_news_to_db(data)
 
     def add_news_to_db(self, data: list[dict]):
