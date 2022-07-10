@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from datetime import datetime
 
+
 def get_cointelegraph_news(driver: webdriver) -> list[dict]:
     """
         Get bitcoin news from https://cointelegraph.com/
