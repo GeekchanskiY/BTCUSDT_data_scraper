@@ -7,6 +7,7 @@ from scraper_dailyhodl import get_dailyhold_news
 from scraper_cointelagraph import get_cointelegraph_news
 from scraper_coingape import get_coingape_news
 from scraper_theblock import get_theblock_news
+from scraper_bitcoinmagazine import get_bitcoinmagazine_news
 # from scraper_cryptopotato import get_cryptopotato_news
 from scraper_beincrypto import get_beincrypto_news
 
@@ -72,7 +73,8 @@ class ScrapersHandler:
     def scrap_all_requests(self):
         data = get_utoday_news()
         self.add_news_to_db(data)
-
+        data = get_bitcoinmagazine_news()
+        self.add_news_to_db(data)
         # Cryptopotato is not available at the moment
 
         #data = get_cryptopotato_news()
