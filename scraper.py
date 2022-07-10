@@ -5,6 +5,7 @@ from scraper_bitcoin import get_bitcoin_news
 from scraper_decrypt import get_decrypt_news
 from scraper_dailyhodl import get_dailyhold_news
 from scraper_cointelagraph import get_cointelegraph_news
+from scraper_coingape import get_coingape_news
 # from scraper_cryptopotato import get_cryptopotato_news
 from scraper_beincrypto import get_beincrypto_news
 
@@ -55,6 +56,11 @@ class ScrapersHandler:
             self.add_news_to_db(data)
         except Exception as e:
             print(f"cointelegraph error {str(e)}")
+        try:
+            data = get_coingape_news(self.driver)
+            self.add_news_to_db(data)
+        except Exception as e:
+            print(f"coingape error {str(e)}")
 
     def scrap_all_requests(self):
         data = get_utoday_news()
