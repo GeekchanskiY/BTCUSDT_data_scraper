@@ -22,6 +22,7 @@ from database import DB
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import WebDriverException
 
 
 class ScrapersHandler:
@@ -36,48 +37,46 @@ class ScrapersHandler:
             self.binance_data_scraper.parse_data()
             self.scrap_all_selenium()
             self.scrap_all_requests()
-            self.driver.quit()
-            self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+            self.restart_driver()
             time.sleep(delay_seconds)
 
     def scrap_all_selenium(self):
         try:
             data = get_dailyhold_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"dailyHodl error {str(e)}")
+        except WebDriverException:
+            self.restart_driver()
         try:
             data = get_bitcoin_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"bitcoin error {str(e)}")
+        except WebDriverException:
+            self.restart_driver()
         try:
             data = get_decrypt_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"decrypt error {str(e)}")
+        except WebDriverException:
+            self.restart_driver()
         try:
             data = get_cointelegraph_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"cointelegraph error {str(e)}")
+        except WebDriverException:
+            self.restart_driver()
         try:
             data = get_coingape_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"coingape error {str(e)}")
-
+        except WebDriverException:
+            self.restart_driver()
         try:
             data = get_theblock_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"theblock error {str(e)}")
+        except WebDriverException:
+            self.restart_driver()
 
         try:
             data = get_blockworks_news(self.driver)
             self.add_news_to_db(data)
-        except Exception as e:
-            print(f"blockworks error {str(e)}")
+        except WebDriverException:
+            self.restart_driver()
 
     def scrap_all_requests(self):
         data = get_utoday_news()
@@ -105,6 +104,10 @@ class ScrapersHandler:
                 link=d["link"],
                 text=d["name"]
             )
+
+    def restart_driver(self):
+        self.driver.quit()
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 
 if __name__ == '__main__':
