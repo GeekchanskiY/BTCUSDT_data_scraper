@@ -59,8 +59,7 @@ class ScrapersHandler:
         try:
             data = get_bitcoin_news(self.driver)
             self.add_news_to_db(data)
-        except WebDriverException as e:
-            print(str(e))
+        except WebDriverException:
             self.restart_driver()
         try:
             data = get_decrypt_news(self.driver)
