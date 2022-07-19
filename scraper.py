@@ -22,12 +22,22 @@ from database import DB
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import WebDriverException
+import logging
+from selenium.webdriver.remote.remote_connection import LOGGER
+
+import os
+
+from urllib3.connectionpool import log as urllibLogger
 
 
 class ScrapersHandler:
     def __init__(self, delay_minutes: int):
-        self.driver: webdriver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+        self.options = Options()
+        self.driver: webdriver = webdriver.Chrome(executable_path='chromedriver.exe',
+                                                  options=self.options)
         self.db: DB = DB()
         self.binance_data_scraper = BinanceDataScraper(self.db)
         self.mainloop(delay_minutes*60)
@@ -49,7 +59,8 @@ class ScrapersHandler:
         try:
             data = get_bitcoin_news(self.driver)
             self.add_news_to_db(data)
-        except WebDriverException:
+        except WebDriverException as e:
+            print(str(e))
             self.restart_driver()
         try:
             data = get_decrypt_news(self.driver)
@@ -107,8 +118,11 @@ class ScrapersHandler:
 
     def restart_driver(self):
         self.driver.quit()
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        self.driver = webdriver.Chrome(executable_path='chromedriver.exe', options=self.options)
 
 
 if __name__ == '__main__':
+    os.environ['WDM_LOG_LEVEL'] = '0'
+    urllibLogger.setLevel(logging.WARNING)
+    LOGGER.setLevel(logging.WARNING)
     scraper = ScrapersHandler(10)
