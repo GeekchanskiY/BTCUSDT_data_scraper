@@ -12,7 +12,10 @@ def get_blockworks_news(driver: webdriver) -> list[dict]:
     for article in articles:
         date_str = article.find_element(By.CLASS_NAME, "post-creation-details").text.split(" / ")[-1]
         date_str = date_str.replace(" EDT", "")
-        date = datetime.datetime.strptime(date_str, "%B %d, %Y, %H:%M %p")
+        try:
+            date = datetime.datetime.strptime(date_str, "%B %d, %Y, %H:%M %p")
+        except ValueError:
+            continue
         output_data.append({
             "name": article.find_element(By.CLASS_NAME, "card_title").text,
             "link": article.find_element(By.TAG_NAME, "a").get_attribute("href"),

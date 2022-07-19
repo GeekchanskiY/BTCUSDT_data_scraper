@@ -11,7 +11,7 @@ def get_bitcoinmagazine_news() -> list[dict]:
     for article in articles:
         try:
             date = datetime.strptime(article.find("span", attrs={"class": "mm-card--metadata-text"}).text, "%b %d, %Y")
-        except ValueError:
+        except (ValueError, AttributeError):
             date = datetime.now()
         output_data.append({
             "name": article.find("h2").text,

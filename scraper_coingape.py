@@ -13,7 +13,7 @@ def get_coingape_news(driver: webdriver):
         date = article.find_element(By.CLASS_NAME, "entry-meta-date").text
         try:
             date = datetime.datetime.strptime(date, "%b %d, %Y")
-        except Exception as e:
+        except ValueError:
             date = datetime.date.today()
 
         date_str = date.strftime("%Y-%m-%d")

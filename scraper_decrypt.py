@@ -16,7 +16,7 @@ def get_decrypt_news(driver: webdriver) -> list[dict]:
             date = article.find_element(By.TAG_NAME, "time").get_attribute("datetime").split("T")[0]
             time = article.find_element(By.TAG_NAME, "time").get_attribute("datetime").split("T")[1]
             time = "{}:{}".format(time.split(":")[0], time.split(":")[1])
-        except:
+        except ValueError:
             continue
         output_data.append({
             "name": article.find_element(By.TAG_NAME, "h2").text,

@@ -9,7 +9,10 @@ def get_utoday_news() -> list[dict]:
     soup = BeautifulSoup(r, 'html.parser')
     articles = soup.find_all("div", attrs={"class": "category-item"})
     for article in articles:
-        time = datetime.strptime(article.find("div", attrs={"class": "humble--time"}).text, "%m/%d/%Y - %H:%M")
+        try:
+            time = datetime.strptime(article.find("div", attrs={"class": "humble--time"}).text, "%m/%d/%Y - %H:%M")
+        except ValueError:
+            continue
         output_data.append(
             {
                 "name": article.find("div", attrs={"class": "category-item__title"}).text,

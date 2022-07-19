@@ -17,7 +17,10 @@ def get_theblock_news(driver: webdriver) -> list[dict]:
                 date = date[:-1]
             else:
                 break
-        date = datetime.datetime.strptime(date, "%B %d, %Y, %H:%M %p")
+        try:
+            date = datetime.datetime.strptime(date, "%B %d, %Y, %H:%M %p")
+        except ValueError:
+            continue
         output_data.append({
             "link": article.find_element(By.TAG_NAME, "a").get_attribute("href"),
             "name": article.find_element(By.TAG_NAME, "h2").text,

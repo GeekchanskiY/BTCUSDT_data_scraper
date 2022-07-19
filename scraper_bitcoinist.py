@@ -10,7 +10,10 @@ def get_bitcoinist_news() -> list[dict]:
     articles = soup.find_all("article", attrs={"class": "jeg_post"})
     for article in articles:
         date_str = article.find("div", attrs={"class": "jeg_meta_date"}).text
-        date = datetime.strptime(date_str, " %B %d, %Y")
+        try:
+            date = datetime.strptime(date_str, " %B %d, %Y")
+        except ValueError:
+            continue
         output_data.append({
             "name": article.find("h3", attrs={"class": "jeg_post_title"}).text.replace("\n", ""),
             "link": article.find("a")["href"],

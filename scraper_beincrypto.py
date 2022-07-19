@@ -9,7 +9,10 @@ def get_beincrypto_news() -> list:
     soup = BeautifulSoup(r, 'html.parser')
     cards = soup.find_all("article", attrs={"class": "multi-news-card"})
     for card in cards:
-        date = datetime.strptime(card.find("span", attrs={"class": "date"}).text, "%b %d, %Y")
+        try:
+            date = datetime.strptime(card.find("span", attrs={"class": "date"}).text, "%b %d, %Y")
+        except ValueError:
+            continue
         str_date = date.strftime("%Y-%m-%d")
         output_data.append(
             {

@@ -11,6 +11,7 @@ class BinanceDataScraper:
         self.database: DB = database
 
     def parse_data(self):
+
         r = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT").json()
         self.database.add_price(symbol=r["symbol"], date=str(datetime.now()), price=r["price"])
 
