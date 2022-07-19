@@ -45,7 +45,27 @@ class DB:
         print(dataframe)
         return dataframe
 
+    def create_table(self):
+        output_str: str = ""
+        news: str = ""
+        with open("app.html", "r", encoding="utf-8") as f:
+            template: str = f.read()
+        for row in self.cur.execute('SELECT * FROM price_data'):
+            date: str = row[0]
+            price: float = row[2]
+            news: str = ""
+
+            output_str += "{price: " + str(price) + ", date_str: '" + date.replace(" ", 'T') + "'},"
+        for row2 in self.cur.execute('SELECT * FROM news_data'):
+            news += "{date: '" + row2[0] + "T" + row2[4] + "', title: \"" + row2[2].replace("\"", " ")\
+                .replace("'", " ") + "\", link: '" + row2[3] + "'},"
+        print(output_str)
+        output_template = template.replace("/*DATA_TO_IMPORT HERE*/", output_str)\
+            .replace("/*NEWS_TO_IMPORT_HERE*/", news)
+        with open("output.html", "w", encoding="utf-8") as f:
+            f.write(output_template)
+
 
 if __name__ == '__main__':
     database: DB = DB()
-    database.get_news_dataframe()
+    database.create_table()
