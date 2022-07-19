@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data output sample</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    header{
+        top: 0;
+        left: 0;
+        text-align: center;
+        background-color: black;
+        color: #fff;
+        padding:5px;
+    }
+    .graphic{
+        position: absolute;
+        left: 0.5%;
+        top: 30px;
+        border: 1px solid black;
+        width: 99%;
+        height: 500px;
+    }
+    .data{
+        width:100%;
+        margin-top: 600px;
+    }
+    .dot{
+        background-color: black;
+        border-radius: 30px;
+        height: 7px;
+        width: 7px;
+        position: absolute;
+        z-index: -1;
+    }
+    .dot div{
+        display: none;
+        position: absolute;
+        margin-top: -40px;
+        background-color: green;
+        width: 100px;
+        z-index: 3;
+    }
+    .dot:hover{
+        background-color: aquamarine;
+    }
+    .dot:hover > div{
+        display: block;
+
+    }
+</style>
+<header>
+    Output data for BTCUSDT for 07.07.2022
+</header>
+    <div class="graphic" id="GRAPHIC">
+    </div>
+    <div class="data">
+        <h1>Новости за час</h1>
+        <div id="this_hour_news">
+            
+        </div>
+        <h1>Новости за день</h1>
+        <div id="this_day_news">
+            
+        </div>
+        <article>
+            <h2>name</h2>
+            <a href="google.com">post link</a>
+            <span>post date</span>
+        </article>
+    </div>
+    <footer>
+        <span style="position: fixed; right:30px; bottom: 20px;">Made by <a href="https://kwork.ru/user/dmtdev">DMT</a></span>
+    </footer>
+<script>
+
+    var imported_data = [/*DATA_TO_IMPORT HERE*/]
+    var imported_news = [/*NEWS_TO_IMPORT_HERE*/]
+    var day_news = []
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    var news = []
+    for (let n in imported_news){
+        console.log(imported_news[n]["title"]);
+        news.push({title: imported_news[n]["title"], date: new Date(imported_news[n]["date"]), link: imported_news[n]["link"]})
+    }
+    
+    function drawNews(fday_news, fhour_news){
+        hnews_el = document.getElementById("this_hour_news")
+        dnews_el = document.getElementById("this_day_news")
+        hnews_el.innerHTML = ""
+        dnews_el.innerHTML = ""
+        for (let dn in fhour_news){
+            hnews_el.innerHTML += '<a href="'+ fhour_news[dn]["link"] +'">'+ fhour_news[dn]["title"] + " --- " + fhour_news[dn]["date"].toString() +'</a><br>'
+        }
+        for (let dn in fday_news){
+            dnews_el.innerHTML += '<a href="'+ fday_news[dn]["link"] +'">'+ fday_news[dn]["title"] + " --- " + fday_news[dn]["date"].toString() +'</a><br>'
+        }
+    }
+    
+    function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'year');
+        data.addColumn('number', 'price');
+
+        for (i = 1; i < imported_data.length; i++){
+            data.addRows([[
+                new Date(imported_data[i]["date_str"]),
+                imported_data[i]["price"],
+            ]])
+        }
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+        var options = {
+          title: 'BTC/USDT price',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          tooltip: {trigger: 'selection'},
+          animation: {
+              startup: true
+          },
+          hAxis: {
+            title: 'Time'
+            },
+            vAxis: {
+          title: 'Price'
+        },
+        crosshair: {
+          color: '#000',
+          trigger: 'selection'
+        },
+        pointSize: 2,
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('GRAPHIC'));
+        google.visualization.events.addListener(chart, 'select', selected);
+
+        function selected(){
+            var selectedItem = chart.getSelection()[0];
+            day_news = []
+            if (selectedItem) {
+                var value = data.getValue(selectedItem.row, selectedItem.column);
+                selected_date = new Date(imported_data[selectedItem.row+1]["date_str"]);
+                
+                needed_hours = selected_date.getHours();
+                needed_day = selected_date.getDate();
+                needed_month = selected_date.getMonth();
+                needed_year = selected_date.getYear();
+                this_hour_news = news.filter(e => {
+
+                    if (e.date.getYear() == needed_year && e.date.getMonth() == needed_month && e.date.getDate() == needed_day){
+                        if (e.date.getHours() == needed_hours){
+                               return true;
+                        } else {
+                            day_news.push(e)
+                            return false;
+                        }
+
+                    } else {
+                        return false;
+                    }
+                })
+                drawNews(day_news, this_hour_news);
+
+            }
+        }
+        chart.draw(data, options);
+        
+    }
+    
+
+
+</script>
+</body>
+</html>
